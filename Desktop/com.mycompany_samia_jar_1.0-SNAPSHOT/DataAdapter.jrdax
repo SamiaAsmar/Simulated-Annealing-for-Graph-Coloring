@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<jdbcDataAdapter class="net.sf.jasperreports.data.jdbc.JdbcDataAdapterImpl">
+  <name>Report</name>
+  <classpath>/Users/samiaasmar/Documents/mysql-connector-j-8.2.0/mysql-connector-j-8.2.0.jar</classpath>
+  <driver>org.postgresql.Driver</driver>
+  <username>samia</username>
+  <password>10073</password>
+  <url>jdbc:postgresql://localhost:5432/postgres</url>
+  <database></database>
+  <savePassword>true</savePassword>
+  <serverAddress></serverAddress>
+</jdbcDataAdapter>

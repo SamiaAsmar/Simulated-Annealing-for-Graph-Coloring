@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.6.final using JasperReports Library version 6.20.6-5c96b6aa8a39ac1dc6b6bea4b81168e16dd39231  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="d" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="13acf49e-4913-4d1b-bccc-113817ad15d1">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DataAdapter.jrdax"/>
+	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false"/>
+	<style name="SubTitle" forecolor="#CCCCCC" fontName="Times New Roman" fontSize="18" isBold="false"/>
+	<style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14" isBold="true"/>
+	<style name="Detail" mode="Transparent" fontName="Times New Roman"/>
+	<style name="Row" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#F0EFEF"/>
+		</conditionalStyle>
+	</style>
+	<queryString language="SQL">
+		<![CDATA[SELECT
+    "Name_of_department",
+    MAX(number_of_product) AS number_of_product,
+    MAX(employee_count) AS employee_count
+FROM (
+    -- Count of products for each department
+    SELECT
+        d."Name_of_department",
+        COUNT(c."Name_of_dep") AS number_of_product,
+        0 AS employee_count
+    FROM
+        myproject.department AS d
+        LEFT JOIN myproject.contain AS c ON d."Name_of_department" = c."Name_of_dep"
+    GROUP BY
+        d."Name_of_department"
+
+    UNION
+
+    -- Count of employees for each department
+    SELECT
+        d."Name_of_department",
+        0 AS number_of_product,
+        COUNT(e."Fname") AS employee_count
+    FROM
+        myproject.department AS d
+        JOIN myproject.employee AS e ON d."Name_of_department" = e."name_of_department"
+    WHERE
+        d."Name_of_department" <> '-'
+    GROUP BY
+        d."Name_of_department"
+    HAVING
+        COUNT(e."Fname") IS NOT NULL
+) AS subquery
+GROUP BY
+    "Name_of_department"
+HAVING
+    MAX(number_of_product) > 0 OR MAX(employee_count) > 0]]>
+	</queryString>
+	<field name="Name_of_department" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Name_of_department"/>
+		<property name="com.jaspersoft.studio.field.label" value="Name_of_department"/>
+	</field>
+	<field name="number_of_product" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="number_of_product"/>
+		<property name="com.jaspersoft.studio.field.label" value="number_of_product"/>
+	</field>
+	<field name="employee_count" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="employee_count"/>
+		<property name="com.jaspersoft.studio.field.label" value="employee_count"/>
+	</field>
+	<group name="Group1">
+		<groupExpression><![CDATA[$F{Name_of_department}]]></groupExpression>
+		<groupHeader>
+			<band height="37">
+				<frame>
+					<reportElement mode="Opaque" x="0" y="7" width="555" height="24" forecolor="#B89F7D" backcolor="#905191" uuid="0a5fc4ac-2e39-4b7a-8f96-59f8eb2df66d"/>
+					<textField textAdjust="StretchHeight">
+						<reportElement style="SubTitle" isPrintRepeatedValues="false" mode="Opaque" x="2" y="0" width="479" height="24" forecolor="#FFFFFF" backcolor="#905191" uuid="4fbebfd3-a184-45af-b7d9-5c3faaf087b5"/>
+						<textElement>
+							<font isBold="false"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$F{Name_of_department}]]></textFieldExpression>
+					</textField>
+				</frame>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="6"/>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="132" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="0" y="0" width="451" height="95" backcolor="#F7F5F5" uuid="6c6ca4e1-17cd-4913-93d6-5e670ea9ae8a"/>
+				<staticText>
+					<reportElement style="Title" mode="Opaque" x="2" y="0" width="449" height="66" forecolor="#FFFFFF" backcolor="#905191" uuid="a2a2cac8-5a7d-4487-8c54-dab235ce4e21"/>
+					<textElement>
+						<font fontName="Snell Roundhand" isBold="false"/>
+					</textElement>
+					<text><![CDATA[Fashion Shope]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="SubTitle" mode="Opaque" x="0" y="70" width="451" height="29" forecolor="#FFFFFF" backcolor="#905191" uuid="8978eac3-c578-41c9-837e-48d2b0184642"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial Rounded MT Bold" size="20" isBold="false"/>
+					</textElement>
+					<text><![CDATA[statistics
+]]></text>
+				</staticText>
+			</frame>
+			<frame>
+				<reportElement mode="Opaque" x="0" y="100" width="451" height="32" forecolor="#000000" backcolor="#7D7D7D" uuid="e3c14156-5b51-4201-918b-97fdc012e5d4"/>
+				<textField pattern="EEEEE dd MMMMM yyyy">
+					<reportElement x="289" y="6" width="144" height="20" forecolor="#FFFFFF" uuid="5c3301e7-a737-4c59-8a2f-a6c79fd1adb8"/>
+					<textElement textAlignment="Right">
+						<font fontName="Serif" size="14"/>
+					</textElement>
+					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+				<textField pattern="HH:mm">
+					<reportElement mode="Opaque" x="200" y="6" width="90" height="20" forecolor="#FFFFFF" backcolor="#7D7D7D" uuid="61c29ae8-99a9-48db-97f1-1e513086f1fb"/>
+					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+			</frame>
+			<image>
+				<reportElement x="460" y="0" width="104" height="112" uuid="7c036987-9896-412d-bd63-36bbf5ec9291"/>
+				<imageExpression><![CDATA["/Users/samiaasmar/Downloads/clothes-rack.png"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="26" splitType="Stretch">
+			<staticText>
+				<reportElement style="Column header" x="0" y="7" width="277" height="18" forecolor="#000000" uuid="dee4bdcf-7615-43fb-ac82-43bc81a9c31b">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="2110a907-ab9f-4501-858c-b896a2e27fb9"/>
+				</reportElement>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[number_of_product]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="277" y="7" width="277" height="18" forecolor="#000000" uuid="672dab87-619c-4e63-8ed4-635101a45fc2">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="de27d218-aafe-46a3-9797-89bcc868d71d"/>
+				</reportElement>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[employee_count]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="18" splitType="Stretch">
+			<frame>
+				<reportElement style="Row" mode="Opaque" x="0" y="0" width="555" height="18" uuid="b50221b5-8254-440b-8c6f-1f0b138c9259"/>
+				<textField textAdjust="StretchHeight">
+					<reportElement style="Detail" positionType="Float" x="0" y="0" width="277" height="18" uuid="33a228af-64ac-46b0-b697-4e3318e2a4c1">
+						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="2110a907-ab9f-4501-858c-b896a2e27fb9"/>
+					</reportElement>
+					<textElement>
+						<font size="14"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{number_of_product}]]></textFieldExpression>
+				</textField>
+				<textField textAdjust="StretchHeight">
+					<reportElement style="Detail" positionType="Float" x="277" y="0" width="277" height="18" uuid="ae0da1a7-ff2a-4c41-b2be-67f64129b5c3">
+						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="de27d218-aafe-46a3-9797-89bcc868d71d"/>
+					</reportElement>
+					<textElement>
+						<font size="14"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{employee_count}]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="7" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="3" width="555" height="1" uuid="1133a906-5b71-476e-9f3e-bc97c97058c1"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="25" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="0" y="1" width="555" height="24" forecolor="#D0B48E" backcolor="#905191" uuid="729c3539-f946-4d0e-a0a7-bda2815ea1b0"/>
+				<textField evaluationTime="Report">
+					<reportElement style="Column header" x="513" y="0" width="40" height="20" forecolor="#FFFFFF" uuid="4834e99c-7f6c-485a-b098-50e5187f2ab4"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="Column header" x="433" y="0" width="80" height="20" forecolor="#FFFFFF" uuid="9825b46e-76f1-469a-abb8-a1cc27aad685"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+				</textField>
+				<textField pattern="EEEEE dd MMMMM yyyy">
+					<reportElement style="Column header" x="2" y="1" width="197" height="20" forecolor="#FFFFFF" uuid="137d38c7-1a83-4fc5-b156-9d5f1b1a0ddc"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>
